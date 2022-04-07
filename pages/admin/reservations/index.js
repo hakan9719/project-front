@@ -39,7 +39,7 @@ export default function Handler({ reservations }) {
               <p>telephone :{reservation.telephone}</p>
               <p>mail :{reservation.mail}</p>
               <p>Carte :{reservation.carte}</p>
-              <p>Status :{reservation.statut ? "True" : "False"}</p>
+              <p>Status :{reservation.statut ? "Occupé" : "Dispo"}</p>
               <div className="card-actions justify-center">
                 <button
                   className="btn btn-primary"
