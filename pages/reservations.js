@@ -15,28 +15,35 @@ export default function handler({ tables }) {
     };
     const data = [];
     dataForm.map((item) => {
-      data = [
-        ...data,
-        {
-          id: item.id,
-          taille: item.value,
-          quantity: item.checked,
-        },
-      ];
+      if (item.checked) {
+        data = [
+          ...data,
+          {
+            id: item.id,
+          },
+        ];
+      }
     });
+    const stringData = "";
+    data.forEach((val) => {
+      stringData += '{"id":' + val.id + "},";
+    });
+
+    const platsFormat = "tables[]:[" + stringData + "]";
+    console.log(platsFormat);
 
     var bodyFormat = [];
     Object.keys(dataClient).forEach((element) => {
       bodyFormat += `&${element}=${dataClient[element]}`;
     });
-
+    console.log(bodyFormat+"&"+platsFormat);
     const result = await fetch("http://localhost:8000/v0/test/reservation", {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       },
-      body: bodyFormat,
+      body: bodyFormat+"&"+platsFormat,
     });
     const resultData = await result.json();
   };

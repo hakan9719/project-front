@@ -1,67 +1,60 @@
 import { useRouter } from "next/router";
 import React from "react";
 
-export default function Handler({ tables }) {
+export default function Handler({ reservations }) {
   const router = useRouter();
+
   const handleDelete = async (e) => {
     e.preventDefault();
+
     const res = await fetch(
-      `http://localhost:8000/v0/test/tables/${e.target.value}`,
+      `http://localhost:8000/v0/test/reservation/${e.target.value}`,
       {
         method: "DELETE",
       }
     );
     if (res.status === 200) {
-      router.push("/admin/tables");
-    }
-  };
-  const handleAdd = async (e) => {
-    e.preventDefault();
-    const res = await fetch(`http://localhost:8000/v0/test/tables`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      },
-      body: `taille=${e.target.taille.value}`,
-    });
-    if (res.status === 200) {
-      router.push("/admin/tables");
+      router.push("/admin/reservations");
     }
   };
   return (
     <div>
       <div className="flex justify-center my-3 bg-base-300 shadow-xl">
-        <form
-          className="flex flex-col justify-center text-center"
-          onSubmit={handleAdd}
+        <button
+          className="btn btn-primary"
+          onClick={() => router.push(`/reservations`)}
         >
-          <label htmlFor="taille">Taille</label>
-          <input type="number" name="taille" defaultValue="2" />
-          <button type="submit">Add</button>
-        </form>
+          Add
+        </button>
       </div>
       <div className="flex flex-col sm:flex-row w-full gap-2">
-        {tables.map((table) => (
+        {reservations.map((reservation) => (
           <div
-            key={table.id}
+            key={reservation.id}
             className="card w-full justify-center my-3 bg-base-300 shadow-xl"
           >
             <div className="card-body text-center">
-              <h2 className="card-title justify-center">{table.taille}</h2>
-              <p>Status :{table.status ? "True" : "False"}</p>
+              <h2 className="card-title justify-center">{reservation.id}</h2>
+              <p>nom :{reservation.nom}</p>
+              <p>prenom :{reservation.prenom}</p>
+              <p>telephone :{reservation.telephone}</p>
+              <p>mail :{reservation.mail}</p>
+              <p>Carte :{reservation.carte}</p>
+              <p>Status :{reservation.statut ? "True" : "False"}</p>
               <div className="card-actions justify-center">
                 <button
                   className="btn btn-primary"
                   name="delete"
-                  value={table.id}
+                  value={reservation.id}
                   onClick={handleDelete}
                 >
                   Delete
                 </button>
                 <button
                   className="btn btn-primary"
-                  onClick={() => router.push(`/admin/tables/${table.id}`)}
+                  onClick={() =>
+                    router.push(`/admin/reservations/${reservation.id}`)
+                  }
                 >
                   Update
                 </button>
@@ -75,16 +68,17 @@ export default function Handler({ tables }) {
 }
 
 export async function getServerSideProps(context) {
-  const data = await fetch(`http://localhost:8000/v0/test/tables`, {
+  const data = await fetch(`http://localhost:8000/v0/test/reservation`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   });
-  const tables = await data.json();
+  const reservations = await data.json();
+
   return {
     props: {
-      tables,
+      reservations,
     },
   };
 }

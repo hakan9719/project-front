@@ -16,7 +16,6 @@ export default function handler({ plats }) {
         },
       ];
     });
-    console.log(data);
   };
   return (
     <>
@@ -64,7 +63,7 @@ export default function handler({ plats }) {
 }
 
 export async function getServerSideProps() {
-  const data = await fetch("http://localhost:8000/api/v0/plat", {
+  const data = await fetch("http://localhost:8000/v0/test/plat", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 
 export default function Handler() {
   const router = useRouter();
-  const [table, setTable] = useState({});
+  const [plat, setPlat] = useState({});
   const [loading, setLoading] = useState(true);
   const { id } = router.query;
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:8000/v0/test/tables/${id}`, {
+    fetch(`http://localhost:8000/v0/test/plat/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export default function Handler() {
       .then((res) =>
         res
           .json()
-          .then((data) => setTable(data))
+          .then((data) => setPlat(data))
           .catch(() => {
             router.push("/404");
           })
@@ -30,26 +30,28 @@ export default function Handler() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`http://localhost:8000/v0/test/tables/${id}`, {
+    const res = await fetch(`http://localhost:8000/v0/test/plat/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: `taille=${e.target.taille.value}`,
+      body: `nom=${e.target.nom.value}&prix=${e.target.prix.value}`,
     });
     if (res.status === 200) {
-      router.push("/admin/tables");
+      router.push("/admin/plats");
     }
   };
   return (
     <div>
       {!loading && (
-        <div key={table.id} className="card w-full justify-center">
+        <div key={plat.id} className="card w-full justify-center">
           <div className="card-body text-center">
             <form onSubmit={handleSubmit}>
-              <h2 className="card-title justify-center">{table.taille}</h2>
-              <input type="number" name="taille" defaultValue={table.taille} />
-              <p>Status :{table.status ? "True" : "False"}</p>
+              <h2 className="card-title justify-center">{plat.id}</h2>
+              <label htmlFor="nom">Nom</label>
+              <input type="text" name="nom" defaultValue={plat.nom} />
+              <label htmlFor="prix">Prix</label>
+              <input type="number" name="prix" defaultValue={plat.prix} />
               <div className="card-actions justify-center">
                 <button className="btn btn-primary" type="submit">
                   Update

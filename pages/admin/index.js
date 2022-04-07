@@ -15,6 +15,9 @@ export default function handler() {
         <li className="font-bold text-2xl mt-8">
           <Link href="/admin/tables">Tables</Link>
         </li>
+        <li className="font-bold text-2xl mt-8">
+          <Link href="/admin/plats">Plats</Link>
+        </li>
       </ul>
     </div>
   );

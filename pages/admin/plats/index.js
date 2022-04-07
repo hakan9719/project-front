@@ -1,32 +1,32 @@
 import { useRouter } from "next/router";
 import React from "react";
 
-export default function Handler({ tables }) {
+export default function Handler({ plats }) {
   const router = useRouter();
   const handleDelete = async (e) => {
     e.preventDefault();
     const res = await fetch(
-      `http://localhost:8000/v0/test/tables/${e.target.value}`,
+      `http://localhost:8000/v0/test/plat/${e.target.value}`,
       {
         method: "DELETE",
       }
     );
     if (res.status === 200) {
-      router.push("/admin/tables");
+      router.push("/admin/plats");
     }
   };
   const handleAdd = async (e) => {
     e.preventDefault();
-    const res = await fetch(`http://localhost:8000/v0/test/tables`, {
+    const res = await fetch(`http://localhost:8000/v0/test/plat`, {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       },
-      body: `taille=${e.target.taille.value}`,
+      body: `nom=${e.target.nom.value}&prix=${e.target.prix.value}`,
     });
     if (res.status === 200) {
-      router.push("/admin/tables");
+      router.push("/admin/plats");
     }
   };
   return (
@@ -36,32 +36,34 @@ export default function Handler({ tables }) {
           className="flex flex-col justify-center text-center"
           onSubmit={handleAdd}
         >
-          <label htmlFor="taille">Taille</label>
-          <input type="number" name="taille" defaultValue="2" />
+          <label htmlFor="nom">Nom</label>
+          <input type="text" name="nom" />
+          <label htmlFor="prix">Prix</label>
+          <input type="number" name="prix" />
           <button type="submit">Add</button>
         </form>
       </div>
       <div className="flex flex-col sm:flex-row w-full gap-2">
-        {tables.map((table) => (
+        {plats?.map((plat) => (
           <div
-            key={table.id}
+            key={plat.id}
             className="card w-full justify-center my-3 bg-base-300 shadow-xl"
           >
             <div className="card-body text-center">
-              <h2 className="card-title justify-center">{table.taille}</h2>
-              <p>Status :{table.status ? "True" : "False"}</p>
+              <h2 className="card-title justify-center">{plat.nom}</h2>
+              <p>Prix :{plat.prix}</p>
               <div className="card-actions justify-center">
                 <button
                   className="btn btn-primary"
                   name="delete"
-                  value={table.id}
+                  value={plat.id}
                   onClick={handleDelete}
                 >
                   Delete
                 </button>
                 <button
                   className="btn btn-primary"
-                  onClick={() => router.push(`/admin/tables/${table.id}`)}
+                  onClick={() => router.push(`/admin/plats/${plat.id}`)}
                 >
                   Update
                 </button>
@@ -75,16 +77,16 @@ export default function Handler({ tables }) {
 }
 
 export async function getServerSideProps(context) {
-  const data = await fetch(`http://localhost:8000/v0/test/tables`, {
+  const data = await fetch(`http://localhost:8000/v0/test/plat`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   });
-  const tables = await data.json();
+  const plats = await data.json();
   return {
     props: {
-      tables,
+      plats,
     },
   };
 }

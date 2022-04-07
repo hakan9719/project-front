@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 
 export default function Handler() {
   const router = useRouter();
-  const [table, setTable] = useState({});
+  const [commande, setCommande] = useState({});
   const [loading, setLoading] = useState(true);
   const { id } = router.query;
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:8000/v0/test/tables/${id}`, {
+    fetch(`http://localhost:8000/v0/test/commande/${id}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export default function Handler() {
       .then((res) =>
         res
           .json()
-          .then((data) => setTable(data))
+          .then((data) => setCommande(data))
           .catch(() => {
             router.push("/404");
           })
@@ -30,26 +30,40 @@ export default function Handler() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`http://localhost:8000/v0/test/tables/${id}`, {
+    const res = await fetch(`http://localhost:8000/v0/test/commande/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: `taille=${e.target.taille.value}`,
+      body: `statut=${e.target.statut.value}`,
     });
     if (res.status === 200) {
-      router.push("/admin/tables");
+      router.push("/admin/commandes");
     }
   };
+
   return (
     <div>
       {!loading && (
-        <div key={table.id} className="card w-full justify-center">
+        <div key={commande.id} className="card w-full justify-center">
           <div className="card-body text-center">
             <form onSubmit={handleSubmit}>
-              <h2 className="card-title justify-center">{table.taille}</h2>
-              <input type="number" name="taille" defaultValue={table.taille} />
-              <p>Status :{table.status ? "True" : "False"}</p>
+              <h2 className="card-title justify-center">{commande.id}</h2>
+              <p>nom :{commande.nom}</p>
+              <p>prenom :{commande.prenom}</p>
+              <p>telephone :{commande.telephone}</p>
+              <p>mail :{commande.mail}</p>
+              <p>Carte :{commande.carte}</p>
+              <label className="label cursor-pointer w-32 text-center mx-auto">
+                <p>Status :</p>
+                <input
+                  type="number"
+                  id={commande.id}
+                  name="statut"
+                  defaultValue={commande.statut}
+                  className="checkbox checkbox-primary"
+                />
+              </label>
               <div className="card-actions justify-center">
                 <button className="btn btn-primary" type="submit">
                   Update
