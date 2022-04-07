@@ -28,22 +28,22 @@ export default function handler({ tables }) {
     data.forEach((val) => {
       stringData += '{"id":' + val.id + "},";
     });
-
-    const platsFormat = "tables[]:[" + stringData + "]";
-    console.log(platsFormat);
+    stringData = stringData.slice(0, -1);
+    const tablesFormat = "tables[]:[" + stringData + "]";
+    console.log(tablesFormat);
 
     var bodyFormat = [];
     Object.keys(dataClient).forEach((element) => {
       bodyFormat += `&${element}=${dataClient[element]}`;
     });
-    console.log(bodyFormat+"&"+platsFormat);
+    console.log(bodyFormat + "&" + tablesFormat);
     const result = await fetch("http://localhost:8000/v0/test/reservation", {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       },
-      body: bodyFormat+"&"+platsFormat,
+      body: bodyFormat + "&" + platsFormat,
     });
     const resultData = await result.json();
   };

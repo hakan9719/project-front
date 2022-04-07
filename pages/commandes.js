@@ -3,19 +3,50 @@ import FormClient from "../components/FormClient";
 import Header from "../components/Header";
 
 export default function handler({ plats }) {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const dataForm = Array.from(e.target.quantity);
+    const dataForm = Array.from(e.target.quantite);
+    const dataClient = {
+      nom: e.target.nom.value,
+      prenom: e.target.prenom.value,
+      mail: e.target.mail.value,
+      telephone: e.target.telephone.value,
+      carte: e.target.carte.value,
+    };
     const data = [];
     dataForm.map((item) => {
-      data = [
-        ...data,
-        {
-          id: item.id,
-          quantity: item.value,
-        },
-      ];
+      if (item.value > 0) {
+        data = [
+          ...data,
+          {
+            id: item.id,
+            quantite: item.value,
+          },
+        ];
+      }
     });
+    const stringData = "";
+    data.forEach((val) => {
+      stringData += '{"id":' + val.id + ',"quantite":' + val.quantite + "},";
+    });
+    stringData = stringData.slice(0, -1);
+    const platsFormat = "plats[]:[" + stringData + "]";
+    console.log(platsFormat);
+
+    var bodyFormat = [];
+    Object.keys(dataClient).forEach((element) => {
+      bodyFormat += `&${element}=${dataClient[element]}`;
+    });
+    console.log(bodyFormat + "&" + platsFormat);
+    const result = await fetch("http://localhost:8000/v0/test/commande", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: bodyFormat + "&" + platsFormat,
+    });
+    const resultData = await result.json();
   };
   return (
     <>
@@ -40,7 +71,7 @@ export default function handler({ plats }) {
                     <input
                       type="number"
                       min={0}
-                      name="quantity"
+                      name="quantite"
                       id={plat.id}
                       defaultValue={0}
                       className="input w-full max-w-xs"
