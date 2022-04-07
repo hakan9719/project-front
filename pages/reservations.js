@@ -43,7 +43,7 @@ export default function handler({ tables }) {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       },
-      body: bodyFormat + "&" + platsFormat,
+      body: bodyFormat + "&" + tablesFormat,
     });
     const resultData = await result.json();
   };
