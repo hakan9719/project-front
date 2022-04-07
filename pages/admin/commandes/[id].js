@@ -56,13 +56,18 @@ export default function Handler() {
               <p>Carte :{commande.carte}</p>
               <label className="label cursor-pointer w-32 text-center mx-auto">
                 <p>Status :</p>
-                <input
+                {/* <input
                   type="number"
                   id={commande.id}
                   name="statut"
                   defaultValue={commande.statut}
                   className="checkbox checkbox-primary"
-                />
+                /> */}
+                <select name="statut" id={commande.id} defaultValue={commande.statut}>
+                  <option value="0">En préparation</option>
+                  <option value="1">Prêt</option>
+                  <option value="2">Délivré</option>
+                </select>
               </label>
               <div className="card-actions justify-center">
                 <button className="btn btn-primary" type="submit">

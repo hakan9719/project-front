@@ -6,7 +6,6 @@ export default function Handler({ reservations }) {
 
   const handleDelete = async (e) => {
     e.preventDefault();
-
     const res = await fetch(
       `http://localhost:8000/v0/test/reservation/${e.target.value}`,
       {

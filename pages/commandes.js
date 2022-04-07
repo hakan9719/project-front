@@ -1,8 +1,9 @@
+import { useRouter } from "next/router";
 import React from "react";
 import FormClient from "../components/FormClient";
-import Header from "../components/Header";
 
-export default function handler({ plats }) {
+export default function Handler({ plats }) {
+  const router = useRouter();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dataForm = Array.from(e.target.quantite);
@@ -27,18 +28,17 @@ export default function handler({ plats }) {
     });
     const stringData = "";
     data.forEach((val) => {
-      stringData += '{"id":' + val.id + ',"quantite":' + val.quantite + "},";
+      stringData += '{"plat":' + val.id + ',"quantite":' + val.quantite + "},";
     });
     stringData = stringData.slice(0, -1);
-    const platsFormat = "plats[]:[" + stringData + "]";
-    console.log(platsFormat);
+    const platsFormat = "plats=[" + stringData + "]";
 
     var bodyFormat = [];
     Object.keys(dataClient).forEach((element) => {
       bodyFormat += `&${element}=${dataClient[element]}`;
     });
-    console.log(bodyFormat + "&" + platsFormat);
-    const result = await fetch("http://localhost:8000/v0/test/commande", {
+
+    const result = await fetch("http://localhost:8000/v0/test/commande/order", {
       method: "POST",
       mode: "cors",
       headers: {
@@ -47,49 +47,47 @@ export default function handler({ plats }) {
       body: bodyFormat + "&" + platsFormat,
     });
     const resultData = await result.json();
+    router.push("/");
   };
   return (
-    <>
-      <Header />
-      <div className="text-center">
-        <h1 className="font-bold text-3xl p-2 my-8">Nos plats</h1>
-        <form onSubmit={handleSubmit}>
-          <div className="flex flex-col items-center justify-around sm:flex-row gap-4">
-            {plats.map((plat) => (
-              <div key={plat.id} className="card w-96 bg-base-300 shadow-xl">
-                <figure className="px-10 pt-10">
-                  <img
-                    src="https://api.lorem.space/image/shoes?w=400&h=225"
-                    alt="Shoes"
-                    className="rounded-xl"
+    <div className="text-center">
+      <h1 className="font-bold text-3xl p-2 my-8">Nos plats</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col items-center justify-around sm:flex-row gap-4">
+          {plats.map((plat) => (
+            <div key={plat.id} className="card w-96 bg-base-300 shadow-xl">
+              <figure className="px-10 pt-10">
+                <img
+                  src="https://api.lorem.space/image/shoes?w=400&h=225"
+                  alt="Shoes"
+                  className="rounded-xl"
+                />
+              </figure>
+              <div className="card-body items-center text-center">
+                <h2 className="card-title">{plat.nom}</h2>
+                <p>{plat.prix}€</p>
+                <div className="card-actions">
+                  <input
+                    type="number"
+                    min={0}
+                    name="quantite"
+                    id={plat.id}
+                    defaultValue={0}
+                    className="input w-full max-w-xs"
                   />
-                </figure>
-                <div className="card-body items-center text-center">
-                  <h2 className="card-title">{plat.name}</h2>
-                  <p>{plat.prix}€</p>
-                  <div className="card-actions">
-                    <input
-                      type="number"
-                      min={0}
-                      name="quantite"
-                      id={plat.id}
-                      defaultValue={0}
-                      className="input w-full max-w-xs"
-                    />
-                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-          <FormClient />
-          <div className="mt-20">
-            <button className="btn btn-secondary" type="submit">
-              Valider
-            </button>
-          </div>
-        </form>
-      </div>
-    </>
+            </div>
+          ))}
+        </div>
+        <FormClient />
+        <div className="mt-20">
+          <button className="btn btn-secondary" type="submit">
+            Valider
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
 
