@@ -12,7 +12,7 @@ export default function Home() {
       <div
         className="hero min-h-screen"
         style={{
-          backgroundImage: `url(https://api.lorem.space/image/fashion?w=1000&h=800)`,
+          backgroundImage: `url(https://image.shutterstock.com/image-photo/blurred-background-people-cafe-resaturant-600w-1063408223.jpg)`,
         }}
       >
         <div className="hero-overlay bg-opacity-60"></div>

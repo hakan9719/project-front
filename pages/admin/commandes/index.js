@@ -25,11 +25,11 @@ export default function Handler({ commandes }) {
           Add
         </button>
       </div>
-      <div className="flex flex-col sm:flex-row w-full gap-2">
+      <div className="flex flex-col sm:flex-row sm:flex-wrap justify-center w-full gap-2">
         {commandes.map((commande) => (
           <div
             key={commande.id}
-            className="card w-full justify-center my-3 bg-base-300 shadow-xl"
+            className="card w-72 justify-center my-3 bg-base-300 shadow-xl"
           >
             <div className="card-body text-center">
               <h2 className="card-title justify-center">{commande.id}</h2>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useRouter } from "next/router";
 import React from "react";
 import FormClient from "../components/FormClient";
@@ -57,9 +58,15 @@ export default function Handler({ plats }) {
           {plats.map((plat) => (
             <div key={plat.id} className="card w-96 bg-base-300 shadow-xl">
               <figure className="px-10 pt-10">
-                <img
+                {/* <img
                   src="https://api.lorem.space/image/shoes?w=400&h=225"
                   alt="Shoes"
+                  className="rounded-xl"
+                /> */}
+                <img
+                  src={plat.image === null ? "https://image.shutterstock.com/image-vector/silhouette-missing-person-stamp-600w-752963539.jpg" : plat.image}
+                  alt="Foods"
+                  layout="responsive"
                   className="rounded-xl"
                 />
               </figure>
