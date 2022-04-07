@@ -49,7 +49,7 @@ export default function Handler({ tables }) {
           >
             <div className="card-body text-center">
               <h2 className="card-title justify-center">{table.taille}</h2>
-              <p>Status :{table.status ? "True" : "False"}</p>
+              <p>Status :{table.statut ? "Libre" : "Occupé"}</p>
               <div className="card-actions justify-center">
                 <button
                   className="btn btn-primary"
